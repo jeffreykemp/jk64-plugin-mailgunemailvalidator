@@ -1,44 +1,76 @@
 var mailgun = {
 
-validation_in_progress : function () {
-  $('#P1_RESULT').html("<img src='#IMAGE_PREFIX#ws/ajax-loader.gif' height='16'/>");
-}
+quickPick : function (thisId, alternate) {
+  return '<a href="javascript:$(\'#'+thisId+'\').val(\''+alternate+'\').focusout();">' + alternate + '</a>';
+},
 
-validation_success : function (data) {
-  $('#P1_RESULT').html(get_suggestion_str(data['is_valid'], data['did_you_mean']));
-}
-
-validation_error : function (error_message) {
-  $('#P1_RESULT').html(error_message);
-}
-
-alternativeSetter : function (alternate) {
-  return '<a href="javascript:$(\'#P1_ADDRESS\').val(\''+alternate+'\').focusout();">' + alternate + '</a>';
-}
-
-get_suggestion_str : function (is_valid, alternate) {
+get_suggestion_str : function (thisId, is_valid, alternate, msgInvalid) {
   if (is_valid) {
-    var result = '<span class="fa fa-check" style="color:forestgreen;font-size:22px"/>';
+    var result = '<span class="mailgunSuccessIcon fa fa-check" style="color:forestgreen;font-size:22px"/>';
     if (alternate) {
-      result += ' (though did you mean '+alternativeSetter(alternate)+'?)</span>';
+      result += ' <span class="mailgunSuggestion">(though did you mean '+mailgun.quickPick(thisId,alternate)+'?)</span>';
     }
     return result
   } else if (alternate) {
-    return '<span class="fa fa-warning" style="color:orange;font-size:22px"/> <span class="warning">Did you mean '+alternativeSetter(alternate)+'?</span>';
+    return '<span class="mailgunQuestionIcon fa fa-warning" style="color:orange;font-size:22px"/> <span class="mailgunSuggestion">Did you mean '+mailgun.quickPick(thisId,alternate)+'?</span>';
   } else {
-    return '<span class="fa fa-close" style="color:red;font-size:22px"/> <span class="warning">Address is invalid.</span>';
+    return '<span class="mailgunInvalidIcon fa fa-close" style="color:red;font-size:22px"/> <span class="invalidAddressText">'+msgInvalid+'</span>';
   }
-}
+},
+
+validation_in_progress : function (e) {
+  // awaiting result for validation
+  var thisId = $(e.target).attr("id")
+     ,resId = thisId+"_result"
+     ,filePrefix = $("#"+resId).data("fileprefix");
+  apex.debug("apexmailgun: validation_in_progress " + resId);
+  $("#"+resId).html("<img class='mailgunLoadingIcon' src='"+filePrefix+"ajax-loader.gif' height='16'/>");
+  apex.debug("trigger validationInProgress");
+  apex.jQuery("#"+thisId).trigger("validationInProgress");
+},
+
+validation_success : function (data, e) {
+  // validation succeeded
+  var thisId = $(e.target).attr("id")
+     ,resId = thisId+"_result";
+  apex.debug("apexmailgun: validation_success " + resId);
+  $("#"+resId).html(mailgun.get_suggestion_str(thisId, data['is_valid'], data['did_you_mean'], $("#"+resId).data("msginvalid")));
+  apex.debug("trigger validationSuccess");
+  apex.jQuery("#"+thisId).trigger("validationSuccess", {data:data});
+},
+
+validation_error : function (error_message, e) {
+  // validation failed
+  var thisId = $(e.target).attr("id")
+     ,resId = thisId+"_result";
+  apex.debug("apexmailgun: validation_error " + resId);
+  $("#"+resId).html('<span class="mailgunErrorIcon fa fa-close" style="color:red;font-size:22px"/> <span class="mailgunFailed">'+error_message+'</span>');
+  apex.debug("trigger validationError");
+  apex.jQuery("#"+thisId).trigger("validationError", {errorMessage:error_message});
+},
 
 init : function() {
-  var daThis = this;
-  var vElementsArray = daThis.affectedElements;
-  var vApiKey = daThis.action.attribute01;
-  apex.debug('showTooltip: affectedElements:' + vElementsArray);
-  apex.debug('showTooltip: Public API Key:' + vApiKey);
+  var daThis = this
+     ,vElementsArray = daThis.affectedElements
+     ,vApiKey = daThis.action.attribute01
+     ,vFilePrefix = daThis.action.attribute02
+	 ,vShowResult = daThis.action.attribute03
+	 ,vMsgInvalid = daThis.action.attribute04;
+  apex.debug('apexmailgun: affectedElements:' + vElementsArray.length);
+  apex.debug('apexmailgun: vApiKey=' + vApiKey);
+  apex.debug('apexmailgun: vFilePrefix=' + vFilePrefix);
   for (var i = 0; i < vElementsArray.length; i++) {
-    var vaffectedElement = daThis.affectedElements.eq(i);
-    apex.debug("applying mailgun validator " + vaffectedElement);
+    var vaffectedElement = daThis.affectedElements.eq(i)
+	   ,thisId = $(vaffectedElement).attr("id");
+	if (vShowResult=="Y") {
+      apex.debug("apexmailgun: adding result span " + thisId);
+      var resId = thisId+"_result";
+      $(vaffectedElement).after("<span class='mailgunResult' id='"+resId+"' "
+		+"data-fileprefix='"+vFilePrefix
+		+"' data-msginvalid='"+vMsgInvalid
+		+"'></span>");
+	}
+    apex.debug("apexmailgun: applying mailgun validator " + thisId);
     $(vaffectedElement).mailgun_validator({
       api_key: vApiKey,
       in_progress: mailgun.validation_in_progress,
