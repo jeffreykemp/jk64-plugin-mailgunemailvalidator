@@ -16,16 +16,4 @@ Wrapper for the jQuery plugin [Mailgun Validator](https://github.com/mailgun/val
       * **True Action** = Mailgun Email Validator [Plug-In]
       * Set **Affected Elements** (e.g. item name(s), or a jQuery selector)
 
-# Plugin Attributes
-
-* **Mailgun Public API Key** = enter your Mailgun Public API key (Note: this is NOT your private key!)
-
-* **Show Validation Result** = leave default to Yes to have the item show a success/fail result next to the item
-
-* **Message when address is invalid** = message text to show if the email address is invalid
-
-# Plugin Events
-
-* **validationInProgress**
-* **validationSuccess**
-* **validationError**
+For more info see the WIKI
