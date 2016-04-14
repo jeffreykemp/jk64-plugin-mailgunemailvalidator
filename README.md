@@ -13,7 +13,7 @@ Wrapper for the jQuery plugin [Mailgun Validator](https://github.com/mailgun/val
 
 ## PRE-REQUISITES ##
 
-* Oracle Application Express 5.0.2
+* [Oracle Application Express 5.0.2](https://apex.oracle.com)
 
 ## INSTALLATION ##
 
