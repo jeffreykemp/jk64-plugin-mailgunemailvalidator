@@ -16,4 +16,4 @@ Wrapper for the jQuery plugin [Mailgun Validator](https://github.com/mailgun/val
       * **True Action** = Mailgun Email Validator [Plug-In]
       * Set **Affected Elements** (e.g. item name(s), or a jQuery selector)
 
-For more info see the WIKI
+For more info refer to the [WIKI](https://github.com/jeffreykemp/jk64-plugin-mailgunemailvalidator/wiki)
