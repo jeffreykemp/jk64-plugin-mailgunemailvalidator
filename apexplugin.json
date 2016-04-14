@@ -1,6 +1,6 @@
 {
   "name" : "Mailgun Email Validator",
-  "version" : "0.1",
+  "version" : "0.2",
   "description" : "Mailgun Email Validator",
   "keywords" : ["email address validation"],
   "homepage" : "https://github.com/jeffreykemp/jk64-plugin-mailgunemailvalidator",
