@@ -7,7 +7,15 @@ Better than just checking whether a user-entered email address conforms to a sub
 
 Wrapper for the jQuery plugin [Mailgun Validator](https://github.com/mailgun/validator-demo)
 
-# Installation
+## DEMO ##
+
+[https://apex.oracle.com/pls/apex/f?p=MAILGUN&c=JK64](https://apex.oracle.com/pls/apex/f?p=MAILGUN&c=JK64)
+
+## PRE-REQUISITES ##
+
+* Oracle Application Express 5.0.2
+
+## INSTALLATION ##
 
 1. Import plugin **dynamic_action_plugin_com_mailgun_email_validator.sql**
 2. [Sign up](https://mailgun.com/signup) for a Mailgun account and insert your public API key
