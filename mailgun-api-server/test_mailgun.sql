@@ -62,8 +62,8 @@ begin
   dbms_output.put_line('file size=' || dbms_lob.getlength(clob_content));
   -- load a binary file
   blob_content := alex.file_util_pkg.get_blob_from_file
-    (p_directory_name => 'SYG_RESOURCE'
-    ,p_file_name      => 'mastersgameslogo-250x95.jpg');
+    (p_directory_name => 'MY_DIRECTORY'
+    ,p_file_name      => 'myimage.png');
   mailgun_pkg.attach
     (p_file_content => 'this is my file contents'
     ,p_file_name    => 'myfilesmall.txt'
