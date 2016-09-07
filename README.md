@@ -1,8 +1,6 @@
 # Mailgun Email Validator
 **A Dynamic Action Plugin for Oracle Application Express**
 
-**[Home](http://jeffreykemp.github.io/jk64-plugin-mailgunemailvalidator/)**
-
 Better than just checking whether a user-entered email address conforms to a subset of the range of valid email address formats; the Mailgun jQuery plugin goes further and checks the domain MX records to determine whether the email address is likely to be correct; it even suggests a correction where the email address appears to be incorrect.
 
 ![](https://raw.githubusercontent.com/jeffreykemp/jk64-plugin-mailgunemailvalidator/master/src/preview.png)
@@ -29,6 +27,8 @@ Wrapper for the jQuery plugin [Mailgun Validator](https://github.com/mailgun/val
 
 ## LINKS ##
 
-For more info refer to the [WIKI](https://github.com/jeffreykemp/jk64-plugin-mailgunemailvalidator/wiki).
+* **[Home Page](http://jeffreykemp.github.io/jk64-plugin-mailgunemailvalidator/)**
 
-To validate email addresses from your server, try the [Mailgun PL/SQL API](https://github.com/jeffreykemp/mailgun-plsql-api).
+* For more info refer to the **[WIKI](https://github.com/jeffreykemp/jk64-plugin-mailgunemailvalidator/wiki)**
+
+* To validate email addresses from your Oracle database server in PL/SQL, try the **[Mailgun PL/SQL API](https://github.com/jeffreykemp/mailgun-plsql-api)**
