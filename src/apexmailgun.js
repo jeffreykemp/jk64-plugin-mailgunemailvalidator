@@ -35,8 +35,8 @@ validation_in_progress : function (e, filePrefix) {
   $("#"+resId).html("<img class='mailgunLoadingIcon'"
                   + " src='" + filePrefix + "ajax-loader.gif'"
                   + " height='16'/>");
-  apex.debug("trigger validationInProgress");
-  apex.jQuery("#"+thisId).trigger("validationInProgress");
+  apex.debug("trigger validationinprogress");
+  apex.jQuery("#"+thisId).trigger("validationinprogress");
 },
 
 validation_success : function (data, e, msginvalid) {
@@ -47,8 +47,8 @@ validation_success : function (data, e, msginvalid) {
   $("#"+resId).html(
     mailgun.get_suggestion_str(thisId, data['is_valid'], data['did_you_mean'], msginvalid)
   );
-  apex.debug("trigger validationSuccess");
-  apex.jQuery("#"+thisId).trigger("validationSuccess", {data:data});
+  apex.debug("trigger validationsuccess");
+  apex.jQuery("#"+thisId).trigger("validationsuccess", {data:data});
 },
 
 validation_error : function (error_message, e) {
@@ -60,8 +60,8 @@ validation_error : function (error_message, e) {
                   + ' <span class="mailgunError">'
                   + error_message
                   + '</span>');
-  apex.debug("trigger validationError");
-  apex.jQuery("#"+thisId).trigger("validationError", {errorMessage:error_message});
+  apex.debug("trigger validationerror");
+  apex.jQuery("#"+thisId).trigger("validationerror", {errorMessage:error_message});
 },
 
 on_change : function (e) {
