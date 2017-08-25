@@ -1,4 +1,5 @@
-# Mailgun Email Validator
+# Mailgun Email Validator ![APEX Plugin](https://cdn.rawgit.com/Dani3lSun/apex-github-badges/b7e95341/badges/apex-plugin-badge.svg)
+
 **A Dynamic Action Plugin for Oracle Application Express**
 
 Better than just checking whether a user-entered email address conforms to a subset of the range of valid email address formats; the Mailgun jQuery plugin goes further and checks the domain MX records to determine whether the email address is likely to be correct; it even suggests a correction where the email address appears to be incorrect.
