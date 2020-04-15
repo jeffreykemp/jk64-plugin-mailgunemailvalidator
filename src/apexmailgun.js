@@ -91,7 +91,7 @@ init : function() {
     if (vShowResult=="Y") {
       apex.debug("apexmailgun: adding result span " + thisId);
       var resId = thisId+"_result";
-      $(vaffectedElement).after("<span class='mailgunResult' id='"+resId+"'></span>");
+      $(vaffectedElement).parent().after("<span class='mailgunResult' id='"+resId+"'></span>");
    		$("#"+thisId).change(function(e){
 			  mailgun.on_change(e);
 		  });
