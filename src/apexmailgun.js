@@ -7,7 +7,7 @@ quickPick : function (thisId, alternate) {
 	     + alternate + '</a>';
 },
 
-get_suggestion_str : function (thisId, is_valid, alternate, msgInvalid) {
+get_suggestion_str : function (thisId, is_valid, alternate, vMsgInvalid) {
   if (is_valid) {
     var result = '<span class="mailgunSuccessIcon fa fa-check"/>';
     if (alternate) {
@@ -23,44 +23,47 @@ get_suggestion_str : function (thisId, is_valid, alternate, msgInvalid) {
          + '</span>';
   } else {
     return '<span class="mailgunErrorIcon fa fa-close"/>'
-         + '<span class="mailgunError">' + msgInvalid + '</span>';
+         + '<span class="mailgunError">' + vMsgInvalid + '</span>';
   }
 },
 
-validation_in_progress : function (e, filePrefix) {
+validation_in_progress : function (e, vFilePrefix, vShowResult) {
   // awaiting result for validation
   var thisId = $(e.target).attr("id"),
       resId = thisId+"_result";
   apex.debug("apexmailgun: validation_in_progress " + resId);
-  $("#"+resId).html("<img class='mailgunLoadingIcon'"
-                  + " src='" + filePrefix + "ajax-loader.gif'"
-                  + " height='16'/>");
-  apex.debug("trigger validationinprogress");
+  if (vShowResult) {
+    $("#"+resId).html("<img class='mailgunLoadingIcon'"
+                    + " src='" + vFilePrefix + "ajax-loader.gif'"
+                    + " height='16'/>");
+  }
   apex.jQuery("#"+thisId).trigger("validationinprogress");
 },
 
-validation_success : function (data, e, msginvalid) {
-  // validation succeeded
+validation_completed : function (data, e, vMsgInvalid, vShowResult) {
+  // successfully validated the email address, got a result
   var thisId = $(e.target).attr("id"),
       resId = thisId+"_result";
-  apex.debug("apexmailgun: validation_success " + resId);
-  $("#"+resId).html(
-    mailgun.get_suggestion_str(thisId, data['is_valid'], data['did_you_mean'], msginvalid)
-  );
-  apex.debug("trigger validationsuccess");
-  apex.jQuery("#"+thisId).trigger("validationsuccess", {data:data});
+  apex.debug("apexmailgun: validation_completed " + resId);
+  if (vShowResult) {
+    $("#"+resId).html(
+      mailgun.get_suggestion_str(thisId, data['is_valid'], data['did_you_mean'], vMsgInvalid)
+    );
+  }
+  apex.jQuery("#"+thisId).trigger("validationcompleted", data);
 },
 
-validation_error : function (error_message, e) {
-  // validation failed
+validation_error : function (error_message, e, vShowResult) {
+  // unable to verify the email address due to an error
   var thisId = $(e.target).attr("id"),
       resId = thisId+"_result";
   apex.debug("apexmailgun: validation_error " + resId);
-  $("#"+resId).html('<span class="mailgunErrorIcon fa fa-close"/>'
-                  + ' <span class="mailgunError">'
-                  + error_message
-                  + '</span>');
-  apex.debug("trigger validationerror");
+  if (vShowResult) {
+    $("#"+resId).html('<span class="mailgunErrorIcon fa fa-close"/>'
+                    + ' <span class="mailgunError">'
+                    + error_message
+                    + '</span>');
+  }
   apex.jQuery("#"+thisId).trigger("validationerror", {errorMessage:error_message});
 },
 
@@ -78,20 +81,25 @@ on_change : function (e) {
 init : function() {
   var daThis = this,
       vElementsArray = daThis.affectedElements,
-      vApiKey = daThis.action.attribute01,
-      vFilePrefix = daThis.action.attribute02,
-      vShowResult = daThis.action.attribute03,
-      vMsgInvalid = daThis.action.attribute04;
+      vApiKey        = daThis.action.attribute01,
+      vFilePrefix    = daThis.action.attribute02,
+      vTimeout       = parseInt(daThis.action.attribute03),
+      vShowResult    = daThis.action.attribute04=="Y",
+      vMsgInvalid    = daThis.action.attribute05,
+      vMsgTooLong    = daThis.action.attribute06,
+      vMsgAmpReqd    = daThis.action.attribute07,
+      vMsgAmpOneOnly = daThis.action.attribute08;
   apex.debug('apexmailgun: affectedElements:' + vElementsArray.length);
   apex.debug('apexmailgun: vApiKey=' + vApiKey);
+  apex.debug('apexmailgun: vTimeout=' + vTimeout);
   apex.debug('apexmailgun: vFilePrefix=' + vFilePrefix);
   for (var i = 0; i < vElementsArray.length; i++) {
     var vaffectedElement = daThis.affectedElements.eq(i),
         thisId = $(vaffectedElement).attr("id");
-    if (vShowResult=="Y") {
+    if (vShowResult) {
       apex.debug("apexmailgun: adding result span " + thisId);
       var resId = thisId+"_result";
-      $(vaffectedElement).after("<span class='mailgunResult' id='"+resId+"'></span>");
+      $(vaffectedElement).parent().after("<span class='mailgunResult' id='"+resId+"'></span>");
    		$("#"+thisId).change(function(e){
 			  mailgun.on_change(e);
 		  });
@@ -99,14 +107,18 @@ init : function() {
   apex.debug("apexmailgun: applying mailgun validator " + thisId);
   $(vaffectedElement).mailgun_validator({
     api_key: vApiKey,
+    timeout: vTimeout,
+    msg_too_long: vMsgTooLong,
+    msg_ampersand_reqd: vMsgAmpReqd,
+    msg_ampersand_one_only: vMsgAmpOneOnly,
     in_progress: function(e) {
-      mailgun.validation_in_progress(e, vFilePrefix);
+      mailgun.validation_in_progress(e, vFilePrefix, vShowResult);
     },
     success: function(data, e) {
-      mailgun.validation_success(data, e, vMsgInvalid);
+      mailgun.validation_completed(data, e, vMsgInvalid, vShowResult);
     },
     error: function (error_message, e) {
-      mailgun.validation_error(error_message, e);
+      mailgun.validation_error(error_message, e, vShowResult);
     }
   });
 }

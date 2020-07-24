@@ -75,43 +75,43 @@
         // length and @ syntax check
         var error_message = false;
         if (address_text.length > 512)
-            error_message = 'Email address exceeds maxiumum allowable length of 512.';
+            error_message = options.msg_too_long||'Email address cannot have over 512 characters.';
+        else if (0 == address_text.split('@').length-1)
+            error_message = options.msg_ampersand_reqd||'Email address must include @.';
         else if (1 !== address_text.split('@').length-1)
-            error_message = 'Email address must contain only one @.';
+            error_message = options.msg_ampersand_one_only||'Email address must contain only one @.';
 
         if (error_message) {
             if (options && options.error) {
                 options.error(error_message, options.e);
             }
             else {
-                if (console) console.log(error_message);
+                apex.debug.error(error_message);
             }
             return;
         }
 
         // require api key
         if (options && options.api_key == undefined) {
-            if (console) console.log('Please pass in api_key to mailgun_validator.');
+            apex.debug.error('Mailgun API key must be supplied.');
         }
 
         // timeout incase of some kind of internal server error
         var timeoutID = setTimeout(function() {
             error_message = 'Error occurred, unable to validate address.';
-            if (!success) {
-                //Abort existing AJAX Request for a true timeout
-                if(element.mailgunRequest) {
-                    element.mailgunRequest.abort();
-                    element.mailgunRequest = null;
-                }
-
-                if (options && options.error) {
-                    options.error(error_message, options.e);
-                }
-                else {
-                    if (console) console.log(error_message);
-                }
+            //Abort existing AJAX Request for a true timeout
+            if(element.mailgunRequest) {
+                element.mailgunRequest.abort();
+                element.mailgunRequest = null;
             }
-        }, 30000); //30 seconds
+
+            if (options && options.error) {
+                options.error(error_message, options.e);
+            }
+            else {
+                apex.debug.error(error_message);
+            }
+        }, options.timeout);
 
         // make ajax call to get validation results
         element.mailgunRequest = $.ajax({
@@ -136,7 +136,7 @@
                     options.error(error_message, options.e);
                 }
                 else {
-                    if (console) console.log(error_message);
+                    apex.debug.error(error_message);
                 }
             }
         });
