@@ -1,4 +1,4 @@
-# Mailgun Email Validator ![APEX Plugin](https://cdn.rawgit.com/Dani3lSun/apex-github-badges/b7e95341/badges/apex-plugin-badge.svg) ![APEX 5.0](https://cdn.rawgit.com/jeffreykemp/apex-github-badges/master/badges/apex-5.0-badge.svg)
+# Mailgun Email Validator ![APEX Plugin](https://cdn.rawgit.com/Dani3lSun/apex-github-badges/b7e95341/badges/apex-plugin-badge.svg) ![APEX 18.2](https://cdn.rawgit.com/Dani3lSun/apex-github-badges/2fee47b7/badges/apex-18_2-badge.svg)
 
 **A Dynamic Action Plugin for Oracle Application Express**
 
