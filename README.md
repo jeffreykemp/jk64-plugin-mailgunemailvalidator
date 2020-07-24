@@ -15,12 +15,13 @@ Wrapper for the jQuery plugin [Mailgun Validator](https://github.com/mailgun/val
 ## PRE-REQUISITES ##
 
 * [Oracle Application Express 5.0.2](https://apex.oracle.com)
+* [Mailgun account](https://mailgun.com/signup) (charges may apply after free tier)
 
 ## INSTALLATION ##
 
 1. Download the **[latest release](https://github.com/jeffreykemp/jk64-plugin-mailgunemailvalidator/releases/latest)**
 2. Import plugin **dynamic_action_plugin_com_mailgun_email_validator.sql** to your Apex app
-3. [Sign up](https://mailgun.com/signup) for a Mailgun account and insert your public API key
+3. Enter your **Mailgun Public API Key**
 4. On the page with one or more Email Address input items, add a Dynamic Action:
       * **Event** = Page Load
       * **True Action** = Mailgun Email Validator [Plug-In]
