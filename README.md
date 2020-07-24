@@ -10,7 +10,7 @@ Wrapper for the jQuery plugin [Mailgun Validator](https://github.com/mailgun/val
 
 ## DEMO ##
 
-[https://apex.oracle.com/pls/apex/f?p=MAILGUN&c=JK64](https://apex.oracle.com/pls/apex/f?p=MAILGUN&c=JK64)
+[https://apex.oracle.com/pls/apex/f?p=MAILGUN_DEMO&c=JK64](https://apex.oracle.com/pls/apex/f?p=MAILGUN&c=JK64)
 
 ## PRE-REQUISITES ##
 
